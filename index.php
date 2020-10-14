@@ -1,26 +1,35 @@
 <?php
 
 // ビンゴカードの判定クラス
-class BingoCard{
-    private $s,             // ビンゴカードの一辺の長さ
-            $card,         // ビンゴカード(単語と座標の対応表)
-            $line,          // 行に該当する単語に印が付いたとき、その座標値を行ごとに足しこむ配列
-            $column,        // 列に該当する単語に印が付いたとき、その座標値を列ごとに足しこむ配列
-            $upperRight,    // 左下から右上斜め行に該当する単語に印が付いたとき、その座標値を足しこむ変数
-            $lowerRight;    // 左上から右下斜め行に該当する単語に印が付いたとき、その座標値を足しこむ変数
+class BingoCard
+{
+    // ビンゴカードの一辺の長さ
+    private $s;
+    // ビンゴカード(単語と座標の対応表)
+    private $card;
+    // 行に該当する単語に印が付いたとき、その座標値を行ごとに足しこむ配列
+    private $line;
+    // 列に該当する単語に印が付いたとき、その座標値を列ごとに足しこむ配列
+    private $column;
+    // 左下から右上斜め行に該当する単語に印が付いたとき、その座標値を足しこむ変数
+    private $upperRight;
+    // 左上から右下斜め行に該当する単語に印が付いたとき、その座標値を足しこむ変数
+    private $lowerRight;
 
     // コンストラクタ
-    public function __construct($s, $card){
+    public function __construct($s, $card)
+    {
         $this->s = $s;
         $this->card = $card;
-        $this->line = array_fill(1, $s+1, 0);
-        $this->column = array_fill(1, $s+1, 0);
+        $this->line = array_fill(0, $s, 0);
+        $this->column = array_fill(0, $s, 0);
         $this->upperRight = 0;
         $this->lowerRight = 0;
     }
 
     // 与えられた単語がビンゴカード上に存在するかチェックする関数
-    public function checkExistOnCard($word){
+    public function checkExistOnCard($word)
+    {
         // 入力された値がビンゴカード上に存在している場合、座標値を対応する変数に格納する
         if (isset($this->card[$word])) {
             $this->countUpGridArray($this->card[$word]['x'], $this->card[$word]['y']);
@@ -28,7 +37,8 @@ class BingoCard{
     }
 
     // 座標値を受け取り、対応する配列をカウントアップ関数
-    public function countUpGridArray($x, $y){
+    public function countUpGridArray($x, $y)
+    {
         // 対応する行配列に足しこむ
         $this->line[$x]++;
         // 対応する列配列に足しこむ
@@ -44,7 +54,8 @@ class BingoCard{
     }
 
     // ビンゴが成立しているかどうか判定する関数
-    public function judgement(){
+    public function judgement()
+    {
         // 左下から右上斜め行に該当するカウントアップした和が、S(ビンゴカードの一辺の長さ)と等しい場合、ビンゴ成立
         if ($this->upperRight == $this->s) {
             print "yes";
@@ -52,7 +63,7 @@ class BingoCard{
         }
 
         // 左上から右下斜め行に該当するカウントアップした和が、S(ビンゴカードの一辺の長さ)と等しい場合、ビンゴ成立
-         if ($this->lowerRight == $this->s) {
+        if ($this->lowerRight == $this->s) {
             print "yes";
             return;
         }
@@ -83,8 +94,8 @@ $s = trim(fgets(STDIN));
 // 元となるカードの作成(単語と座標の対応表)
 for ($y=0; $y<$s; $y++) {
     $wordArray = explode(' ', trim(fgets(STDIN)));
-    foreach($wordArray as $x => $word) {
-        $card[$word] = ['x' => $x+1, 'y' => $y+1];
+    foreach ($wordArray as $x => $word) {
+        $card[$word] = ['x' => $x, 'y' => $y];
     }
 }
 
@@ -102,5 +113,3 @@ for ($i=0; $i<$n; $i++) {
 
 // ビンゴが成立しているか判定する
 $bingoCard->judgement();
-
-?>
